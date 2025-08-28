@@ -16,15 +16,18 @@ async fn main() {
         }
         Some(ext) => ext.to_string_lossy(),
     };
-
     let client = Client::from_env().unwrap();
+    let endpoint = client
+        .get_bucket_base()
+        .endpoint()
+        .to_url()
+        .to_string()
+        .replace("https://", "")
+        .replace("/", "");
+    let bucket = client.get_bucket_base().get_name().to_string();
     let timestamp = Local::now().format("%Y/%m/%d/%H-%M-%S-%3f").to_string();
     let uuid_simple = Uuid::new_v4().simple();
     let fs = format!("markdown/{timestamp}-{uuid_simple}.{ext}");
-    // 这里再次同环境变量中获取配置，这里的变量名同Client::from_env()
-    // Client没有对外开发获取配置的方法，暂时先这样获取
-    let endpoint = env::var("ALIYUN_ENDPOINT").unwrap();
-    let bucket = env::var("ALIYUN_BUCKET").unwrap();
     let url = format!("https://{bucket}.{endpoint}/{fs}");
     let _ = client.put_file(PathBuf::from(file), fs).await;
     println!("{url}");
