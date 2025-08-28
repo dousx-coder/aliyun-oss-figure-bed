@@ -1,5 +1,14 @@
 # 阿里云图床上传工具
 
+## 环境变量
+
+需要配置以下环境变量
+
+- ALIYUN_KEY_ID
+- ALIYUN_KEY_SECRET
+- ALIYUN_ENDPOINT
+- ALIYUN_BUCKET
+
 ## 开发测试
 
 ```shell
