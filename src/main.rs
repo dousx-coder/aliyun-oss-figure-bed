@@ -1,5 +1,5 @@
-use aliyun_oss_client::file::Files;
 use aliyun_oss_client::Client;
+use aliyun_oss_client::file::Files;
 use chrono::Local;
 use std::env;
 use std::path::{Path, PathBuf};
@@ -27,8 +27,20 @@ async fn main() {
     let bucket = client.get_bucket_base().get_name().to_string();
     let timestamp = Local::now().format("%Y/%m/%d/%H-%M-%S-%3f").to_string();
     let uuid_simple = Uuid::new_v4().simple();
-    let fs = format!("markdown/{timestamp}-{uuid_simple}.{ext}");
-    let url = format!("https://{bucket}.{endpoint}/{fs}");
-    let _ = client.put_file(PathBuf::from(file), fs).await;
-    println!("{url}");
+    let fs = format!("{timestamp}-{uuid_simple}.{ext}");
+    let md = format!("markdown/{fs}");
+    let url = format!("https://{bucket}.{endpoint}/{md}");
+    match client.put_file(PathBuf::from(file), md).await {
+        Ok(_) => {
+            if args.len() >= 3 && "md" == &args[2] {
+                // 输出md可引用的路径
+                println!("![{fs}]({url})");
+            } else {
+                println!("{url}");
+            }
+        }
+        Err(e) => {
+            eprintln!("上传异常: {}", e);
+        }
+    }
 }
