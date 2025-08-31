@@ -47,3 +47,16 @@ cargo install --path .
 ```shell
 cargo build --release
 ```
+
+
+
+## 4. 额外说明
+
+### 4.1 mac需要注意
+
+1. `install` 之后，`zsh`能执行，但是`Typora`如果不配置绝对路径会找不到命令。
+2. zsh配置环境变量之后，无法读不到环境变量（原因待排查），这种情况暂时先在代码中配置变量(仅在当前进程中生效)。
+
+![image-20250831214024084](https://cruder-figure-bed.oss-cn-beijing.aliyuncs.com/markdown/2025/08/31/21-40-24-119-5f5a665162c7436ea7dceac1b17f2b2b.png)
+
+![image-20250831214406637](https://cruder-figure-bed.oss-cn-beijing.aliyuncs.com/markdown/2025/08/31/21-44-06-682-28b063097c1f4b8da55d6db234231694.png)
