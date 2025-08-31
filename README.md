@@ -1,6 +1,10 @@
 # 阿里云图床上传工具
 
-## 环境变量
+> 1. 支持多个图片上传
+>
+> 2. 支持`md`参数控制输出结果
+
+## 1. 环境变量
 
 需要配置以下环境变量
 
@@ -9,21 +13,26 @@
 - ALIYUN_ENDPOINT
 - ALIYUN_BUCKET
 
-## 开发测试
+## 2. 开发测试
+
+1. 输出`Typora`自定义命令格式
 
 ```shell
-cargo run "img/dog.jpg"
+cargo run "img/dog.jpg" "img/dog2.jpg"
 ```
 
-## 构建
+2. 输出`md`可访问格式
 
 ```shell
-cargo build --release
+cargo run md "img/dog.jpg" "img/dog2.jpg"
 ```
 
-## 安装到当前系统
+运行效果示例
+![2025/08/31/21-08-36-897-6464d12bab254e388a455045c317ad46.png](https://cruder-figure-bed.oss-cn-beijing.aliyuncs.com/markdown/2025/08/31/21-08-36-897-6464d12bab254e388a455045c317ad46.png)
 
-### 1. cargo install
+## 3. 构建
+
+### 3.1 使用cargo install安装
 
 > 暂时不放到https://crates.io/
 
@@ -33,10 +42,8 @@ cargo install --path .
 
 ![image-20250827144349440](https://cruder-figure-bed.oss-cn-beijing.aliyuncs.com/markdown/2025/08/27/14-43-49-755-09850106c4564ee5956bdbd968f8e43d.png)
 
-### 2. 构建可执行程序，然后配置环境变量
+### 3.2 构建可执行程序，将可执行文件放到指定目录然后配置环境变量
 
-## 参数说明
-
-新增`md`参数，输出不同的路径结果
-
-![image-20250829162532249](https://cruder-figure-bed.oss-cn-beijing.aliyuncs.com/markdown/2025/08/29/16-25-32-847-66bf9bcdfdc6468c959cee9f4351a027.png)
+```shell
+cargo build --release
+```
