@@ -1,9 +1,10 @@
-use aliyun_oss_client::file::Files;
 use aliyun_oss_client::Client;
+use aliyun_oss_client::file::Files;
 use chrono::Local;
 use std::env;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
+use tokio::sync::Semaphore;
 use uuid::Uuid;
 
 #[tokio::main]
@@ -33,6 +34,7 @@ async fn main() {
     let bucket = client.get_bucket_base().get_name().to_string();
     let client = Arc::new(client);
 
+    let semaphore = Arc::new(Semaphore::new(3));
     let mut handles = Vec::new();
 
     for i in start..args.len() {
@@ -49,8 +51,11 @@ async fn main() {
         let md = format!("markdown/{fs}");
         let url = format!("https://{bucket}.{endpoint}/{md}");
         let tc = client.clone();
+        let sc = semaphore.clone();
 
         let handle = tokio::spawn(async move {
+            // 获取许可，如果达到最大并发数则等待
+            let _permit = sc.acquire().await.unwrap();
             match tc.put_file(PathBuf::from(&file), md).await {
                 Ok(_) => {
                     if is_md {
@@ -65,6 +70,7 @@ async fn main() {
                     None
                 }
             }
+            // _permit 会在离开作用域时自动释放
         });
         handles.push(handle);
     }
