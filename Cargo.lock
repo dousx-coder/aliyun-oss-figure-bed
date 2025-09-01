@@ -43,10 +43,11 @@ dependencies = [
 
 [[package]]
 name = "aliyun-oss-figure-bed"
-version = "0.1.5"
+version = "0.1.6"
 dependencies = [
  "aliyun-oss-client",
  "chrono",
+ "futures",
  "tokio",
  "uuid",
 ]
